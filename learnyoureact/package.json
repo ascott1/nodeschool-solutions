@@ -10,9 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.13.1",
+    "browserify": "^10.2.4",
     "express": "^4.13.0",
     "express-react-views": "^0.8.1",
     "node-jsx": "^0.13.3",
-    "react": "^0.13.3"
+    "react": "^0.13.3",
+    "reactify": "^1.1.1"
   }
 }
