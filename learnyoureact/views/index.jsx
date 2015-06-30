@@ -5,8 +5,8 @@ var TodoBox = React.createClass({
       return (
         <div className="todoBox">
           <h1>Todos</h1>
-            <TodoList data = {this.props.data} />
-            <TodoForm />
+	        <TodoList data = {this.props.data} />
+	        <TodoForm />
         </div>
       );
   }
@@ -21,14 +21,10 @@ var TodoList = React.createClass({
     };
   },
   changeTitle: function(e) {
-    this.setState({
-      titleValue: e.target.value
-    });
+    this.setState({titleValue: e.target.value});
   },
   changeDetail: function(e) {
-    this.setState({
-      detailValue: e.target.value
-    });
+    this.setState({detailValue: e.target.value});
   },
   addTodo: function() {
     var newData = this.state.data;
@@ -40,10 +36,16 @@ var TodoList = React.createClass({
     this.setState({titleValue: ""});
     this.setState({detailValue: ""});
   },
+  removeTodo: function (title) {
+    var newData = this.state.data.filter(function (todo) {
+      return todo.title !== title;
+    });
+    this.setState({data: newData});
+  },
   render: function() {
     var todo = this.state.data.map(function(obj) {
-      return <Todo title={obj.title} key={obj.title}>{obj.detail}</Todo>;
-    });
+      return <Todo title={obj.title} key={obj.title} onDelete={this.removeTodo}>{obj.detail}</Todo>;
+    }.bind(this));
     return (
       <div className = "todoList">
         <div>
@@ -63,7 +65,8 @@ var TodoList = React.createClass({
 
 var Todo = React.createClass({
   propTypes: {
-    title: React.PropTypes.string.isRequired
+    title: React.PropTypes.string.isRequired,
+    onDelete: React.PropTypes.func.isRequired
   },
   getInitialState: function () {
     return {
@@ -85,9 +88,13 @@ var Todo = React.createClass({
       });
     }
   },
+  _onDelete: function () {
+    this.props.onDelete(this.props.title);
+  },
   render: function () {
     return (
       <tr style={this.state.TodoStyle}>
+        <td style={style.tableContent}><button onClick={this._onDelete}>X</button></td>
         <td style={style.tableContent}><input type="checkbox" checked={this.state.checked} onChange={this.handleChange} /></td>
         <td style={style.tableContent}>{this.props.title}</td>
         <td style={style.tableContent}>{this.props.children}</td>
